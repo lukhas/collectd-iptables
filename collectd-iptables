@@ -16,6 +16,9 @@ while sleep "$INTERVAL"; do
     bytes=$(echo "$ipt" | grep $r | awk '{print $2}')
     echo "PUTVAL \"$HOSTNAME/iptables/ipt_packets-$r\" interval=$INTERVAL N:$packets"
     echo "PUTVAL \"$HOSTNAME/iptables/ipt_bytes-$r\" interval=$INTERVAL N:$bytes"
+    # also output gauge counters because derive is broken for some rules
+    echo "PUTVAL \"$HOSTNAME/iptables/gauge-gauge-$r\" interval=$INTERVAL N:$packets"
+    echo "PUTVAL \"$HOSTNAME/iptables/gauge-gauge-$r\" interval=$INTERVAL N:$bytes"
   done
   
 done
