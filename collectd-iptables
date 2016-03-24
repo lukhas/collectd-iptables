@@ -9,7 +9,7 @@ while sleep "$INTERVAL"; do
   source $(dirname $0)/config
 
   # only ask iptables once
-  ipt=$(iptables -L -vnx)
+  ipt=$($IPTABLES -L -vnx)
   
   for r in $RULES ; do
     packets=$(echo "$ipt" | grep $r | awk '{print $1}')
