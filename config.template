@@ -1,0 +1,3 @@
+# adapt and rename to config
+# rules must match comments in iptables config
+RULES="failover_ip accepted_80 ratelimit_dropped"

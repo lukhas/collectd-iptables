@@ -1,0 +1,22 @@
+#!/bin/bash
+
+HOSTNAME="${COLLECTD_HOSTNAME:-`hostname -f`}"
+INTERVAL="${COLLECTD_INTERVAL:-60}"
+
+
+while sleep "$INTERVAL"; do
+  # refresh config in case we need to monitor different rules
+  source $(dirname $0)/config
+
+  # only ask iptables once
+  ipt=$(iptables -L -vnx)
+  
+  for r in $RULES ; do
+    packets=$(echo "$ipt" | grep $r | awk '{print $1}')
+    bytes=$(echo "$ipt" | grep $r | awk '{print $2}')
+    echo "PUTVAL \"$HOSTNAME/iptables/ipt_packets-$r\" interval=$INTERVAL N:$packets"
+    echo "PUTVAL \"$HOSTNAME/iptables/ipt_bytes-$r\" interval=$INTERVAL N:$bytes"
+  done
+  
+done
+
